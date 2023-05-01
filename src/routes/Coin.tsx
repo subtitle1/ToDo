@@ -6,7 +6,6 @@ import {
   Link,
   useRouteMatch,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import Price from "./Price";
@@ -75,6 +74,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   border-radius: 10px;
   color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.textColor};
+  font-weight: ${(props) => (props.isActive ? "bold" : "")};
   a {
     display: block;
   }
@@ -155,6 +155,7 @@ function Coin() {
   const chartMatch = useRouteMatch("/:coinId/chart");
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    // key는 react query 캐시 시스템에서 저장되고 작동하기 위해 고유한 값이어야 한다(info, tickers)
     ["info", coinId],
     () => fetchCoinInfo(coinId)
   );
@@ -186,8 +187,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
@@ -211,7 +212,7 @@ function Coin() {
           </Tabs>
           <Switch>
             <Route path={`/:coinId/chart`}>
-              <Chart></Chart>
+              <Chart coinId={coinId}></Chart>
             </Route>
             <Route path={`/:coinId/price`}>
               <Price></Price>
