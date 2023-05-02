@@ -10,7 +10,10 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import { Helmet } from "react-helmet";
 import { fetchCoinInfo, fetchCoinTicker } from "../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareCaretLeft } from "@fortawesome/free-solid-svg-icons";
 
 const Loader = styled.span`
   text-align: center;
@@ -32,17 +35,26 @@ const Header = styled.header`
   color: ${(props) => props.theme.accentColor};
 `;
 
+const TitleContainer = styled.div`
+  text-align: center;
+  display: block;
+`;
+
 const Title = styled.h1`
   font-family: "Bruno Ace", cursive;
   font-size: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.tabBgColor};
   padding: 20px 20px;
   border-radius: 10px;
+  color: ${(props) => props.theme.cntTextColor};
 `;
 
 const OverviewItem = styled.div`
@@ -54,6 +66,18 @@ const OverviewItem = styled.div`
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 5px;
+  }
+`;
+
+const BackBtn = styled.div`
+  text-align: center;
+  display: block;
+  color: white;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.5s;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
   }
 `;
 
@@ -69,11 +93,11 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.tabBgColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.textColor};
+    props.isActive ? props.theme.accentColor : props.theme.cntTextColor};
   font-weight: ${(props) => (props.isActive ? "bold" : "")};
   a {
     display: block;
@@ -82,6 +106,7 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 const Description = styled.p`
   margin: 20px 0px;
+  color: ${(props) => props.theme.cntTextColor};
 `;
 
 interface RouteParams {
@@ -168,10 +193,30 @@ function Coin() {
 
   return (
     <Container>
-      <Header>
-        <Title>
+      <Helmet>
+        <title>
           {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
-        </Title>
+        </title>
+      </Helmet>
+      <Header>
+        <TitleContainer>
+          <BackBtn>
+            <Link
+              to={{
+                pathname: `/`,
+              }}
+            >
+              <FontAwesomeIcon size="2x" icon={faSquareCaretLeft} />
+            </Link>
+          </BackBtn>
+          <Title>
+            {state?.name
+              ? state?.name
+              : loading
+              ? "Loading..."
+              : infoData?.name}
+          </Title>
+        </TitleContainer>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>

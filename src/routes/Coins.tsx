@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -20,7 +21,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   margin-bottom: 10px;
   border-radius: 15px;
   a {
@@ -65,6 +66,9 @@ function Coins() {
 
   return (
     <Container>
+      <Helmet>
+        <title>COINS</title>
+      </Helmet>
       <Header>
         <Title>COINS</Title>
       </Header>
@@ -77,7 +81,7 @@ function Coins() {
               <Link
                 to={{
                   pathname: `/${coin.id}`,
-                  state: { name: coin.name },
+                  state: { name: coin.name, symbol: coin.symbol.toLowerCase() },
                 }}
               >
                 <Img
