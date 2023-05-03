@@ -1,6 +1,11 @@
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import React, { useState } from "react";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { darkTheme, lightTheme } from "./theme";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -64,12 +69,56 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const ModeContainer = styled.div`
+  border-radius: 50px;
+`;
+
+const ModeBtn = styled.button`
+  width: 75px;
+  height: 75px;
+  padding: 10px 10px;
+  border-radius: 100px;
+  position: absolute;
+  background-color: #ffffff;
+  border-color: none;
+  margin-left: 23px;
+  top: 3%;
+  color: ${(props) => props.theme.accentColor};
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.3s ease;
+
+  border: none;
+  &:hover {
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+      7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+  }
+`;
+
 function App() {
+  const [mode, setMode] = useState(false);
+  const [modeBtn, setModeBtn] = useState(faMoon);
+
+  const theme = mode === false ? darkTheme : lightTheme;
+  const icon = modeBtn === faMoon ? faSun : faMoon;
+
+  const toggleTheme = () => {
+    setMode(!mode);
+    setModeBtn(icon);
+  };
+
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider theme={theme}>
+        <ModeContainer>
+          <ModeBtn onClick={toggleTheme}>
+            <FontAwesomeIcon icon={modeBtn} size="3x" />
+          </ModeBtn>
+        </ModeContainer>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }

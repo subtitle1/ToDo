@@ -18,6 +18,7 @@ import { faSquareCaretLeft } from "@fortawesome/free-solid-svg-icons";
 const Loader = styled.span`
   text-align: center;
   display: block;
+  color: ${(props) => props.theme.loaderColor};
 `;
 
 const Container = styled.div`

@@ -43,6 +43,7 @@ const Title = styled.h1`
 const Loader = styled.span`
   text-align: center;
   display: block;
+  color: ${(props) => props.theme.loaderColor};
 `;
 
 const Img = styled.img`
