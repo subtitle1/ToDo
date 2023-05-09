@@ -1,8 +1,13 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
 import { Helmet } from "react-helmet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -62,7 +67,36 @@ interface ICoin {
   type: string;
 }
 
+const ModeBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background-color: #ffffff;
+  border-color: none;
+  margin-left: 20px;
+
+  color: ${(props) => props.theme.accentColor};
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.3s ease;
+
+  border: none;
+  &:hover {
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+      7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+  }
+`;
+
 function Coins() {
+  const [modeBtn, setModeBtn] = useState(faMoon);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+
+  const toggleDarkAtom = () => {
+    const icon = modeBtn === faMoon ? faSun : faMoon;
+    setDarkAtom((prev) => !prev);
+    setModeBtn(icon);
+  };
+
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins); // required agrs: queryKey, fetcher function
 
   return (
@@ -71,7 +105,12 @@ function Coins() {
         <title>COINS</title>
       </Helmet>
       <Header>
-        <Title>COINS</Title>
+        <Title>
+          COINS
+          <ModeBtn onClick={toggleDarkAtom}>
+            <FontAwesomeIcon icon={modeBtn} size="2x" />
+          </ModeBtn>
+        </Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
