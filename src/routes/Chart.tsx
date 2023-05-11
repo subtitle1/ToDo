@@ -3,6 +3,7 @@ import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "../atoms";
+import styled from "styled-components";
 
 interface ChartProps {
   coinId: string;
@@ -19,8 +20,16 @@ interface IHistory {
   volume: string;
 }
 
+const Loader = styled.span`
+  text-align: center;
+  display: block;
+  color: ${(props) => props.theme.loaderColor};
+`;
+
 function Chart({ coinId }: ChartProps) {
+  // isDark atom의 값을 반환
   const isDark = useRecoilValue(isDarkAtom);
+
   const { isLoading, data } = useQuery<IHistory[]>(
     [coinId],
     () => fetchCoinHistory(coinId)
@@ -34,7 +43,7 @@ function Chart({ coinId }: ChartProps) {
   return (
     <div>
       {isLoading ? (
-        "Loading chart..."
+        <Loader>Loading chart...</Loader>
       ) : (
         <div>
           <ApexChart

@@ -174,10 +174,6 @@ interface PriceData {
   };
 }
 
-interface ICoinProps {
-  isDark: boolean;
-}
-
 function Coin() {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
@@ -189,6 +185,7 @@ function Coin() {
     ["info", coinId],
     () => fetchCoinInfo(coinId)
   );
+
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", coinId],
     () => fetchCoinTicker(coinId)
@@ -265,7 +262,7 @@ function Coin() {
               <Chart coinId={coinId}></Chart>
             </Route>
             <Route path={`/:coinId/price`}>
-              <Price></Price>
+              <Price coinId={coinId}></Price>
             </Route>
           </Switch>
         </>

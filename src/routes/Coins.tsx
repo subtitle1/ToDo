@@ -89,6 +89,7 @@ const ModeBtn = styled.button`
 
 function Coins() {
   const [modeBtn, setModeBtn] = useState(faMoon);
+  // useSetRecoilState 매개변수로 atom을 받고, atom을 변경하는 함수를 반환
   const setDarkAtom = useSetRecoilState(isDarkAtom);
 
   const toggleDarkAtom = () => {
@@ -105,12 +106,10 @@ function Coins() {
         <title>COINS</title>
       </Helmet>
       <Header>
-        <Title>
-          COINS
-          <ModeBtn onClick={toggleDarkAtom}>
-            <FontAwesomeIcon icon={modeBtn} size="2x" />
-          </ModeBtn>
-        </Title>
+        <Title>COINS</Title>
+        <ModeBtn onClick={toggleDarkAtom}>
+          <FontAwesomeIcon icon={modeBtn} size="2x" />
+        </ModeBtn>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
