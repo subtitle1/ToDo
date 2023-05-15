@@ -5,6 +5,8 @@ interface IForm {
   email: string; // required true가 아닌 것들은 email?
   username: string;
   password: string;
+  password1: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -12,13 +14,22 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {
-    console.log(data);
+
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password1) {
+      setError(
+        "password1",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
+    }
+    // setError("extraError", { message: "Server offline" });
   };
 
   console.log(errors);
@@ -39,8 +50,15 @@ function ToDoList() {
         <span>{errors?.email?.message as string}</span>
         <input
           {...register("username", {
-            required: true,
-            minLength: 5,
+            required: "write here",
+            validate: {
+              // async, 비동기로 만들어 서버에서 확인 후 응답을 받을 수 있음
+              noStella: async (value) =>
+                value.includes("stella") ? "no Stellas allowed" : true,
+              noTella: (value) =>
+                value.includes("tella") ? "no tellas allowed" : true,
+            },
+            minLength: 4,
           })}
           placeholder="user name"
         />
@@ -55,8 +73,19 @@ function ToDoList() {
           })}
           placeholder="Password"
         />
-        <span>{errors?.password?.message as string}</span>
+        <input
+          {...register("password1", {
+            required: "Password is required",
+            minLength: {
+              value: 5,
+              message: "Your password is too short.",
+            },
+          })}
+          placeholder="Password1"
+        />
+        <span>{errors?.password1?.message as string}</span>
         <button>Add</button>
+        <span>{errors?.extraError?.message as string}</span>
       </form>
     </div>
   );
