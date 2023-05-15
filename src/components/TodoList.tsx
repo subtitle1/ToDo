@@ -66,7 +66,7 @@ const BtnContainer = styled.div``;
 
 function ToDoList() {
   const toDos = useRecoilValue(toDoState);
-
+  console.log("toDos", toDos);
   return (
     <div>
       <Container>
