@@ -1,8 +1,8 @@
 import { DefaultTheme } from "styled-components";
 
 export const darkTheme: DefaultTheme = {
-  bgColor: "#353b48",
-  textColor: "#ffffff",
+  bgColor: "#EDF2F4",
+  textColor: "#707aa3",
   loaderColor: "#ffffff",
   cntTextColor: "#dcdde1",
   accentColor: "#a6ddc2",
