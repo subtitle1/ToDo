@@ -52,6 +52,7 @@ table {
 }
 * {
   box-sizing: border-box;
+  font-family: 'Varela Round', sans-serif;
 }
 body {
   font-weight: 300;

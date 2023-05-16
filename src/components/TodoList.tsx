@@ -1,8 +1,14 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CreateToDo from "./CreateToDo";
-import { toDoState } from "../atoms";
+import { Categories, categoryState, toDoSelector } from "../atoms";
 import ToDo from "./ToDo";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faCheck,
+  faBriefcase,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +23,6 @@ const ToDoContainer = styled.div`
   width: 22em;
   box-shadow: 1px 0px 25px #cddbe1;
   border-radius: 3px;
-  /* margin: -6.7em 2.2em; */
 `;
 
 const ToDoHeader = styled.header`
@@ -32,20 +37,47 @@ const ToDoHeader = styled.header`
   }
 `;
 
+const ToDoCategory = styled.h2`
+  text-align: center;
+  font-weight: bold;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+  color: rgb(238, 156, 167);
+`;
+
+const Tab = styled.a`
+  text-align: center;
+  padding: 7px 0px;
+  cursor: pointer;
+  &:hover {
+    color: rgb(223, 102, 118);
+    font-size: 15px;
+  }
+`;
+
 const ToDoContent = styled.div`
   height: 20em;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #dfdfdf;
+  }
 `;
 
 const ToDoItems = styled.div`
-  /* background: #f3f7f8; */
   height: 4.5em;
   width: 100%;
-  padding: 20px;
-  /* opacity: 0; */
+  padding: 15px;
   vertical-align: middle;
-  /* border-bottom: 1px solid #eee; */
+
   p {
     color: #707aa3;
     font-size: 0.75em;
@@ -62,11 +94,14 @@ const ToDoFooter = styled.div`
   border-top: 1px solid #eee;
 `;
 
-const BtnContainer = styled.div``;
-
 function ToDoList() {
-  const toDos = useRecoilValue(toDoState);
-  console.log("toDos", toDos);
+  const toDos = useRecoilValue(toDoSelector);
+  const [category, setCategory] = useRecoilState(categoryState);
+
+  const onClick = (event: React.MouseEvent<HTMLElement>) => {
+    setCategory(event.currentTarget.dataset.category as any);
+  };
+
   return (
     <div>
       <Container>
@@ -76,6 +111,18 @@ function ToDoList() {
           </ToDoHeader>
           <ToDoContent>
             <ToDoItems>
+              <Tabs>
+                <Tab data-category={Categories.TO_DO} onClick={onClick}>
+                  <FontAwesomeIcon icon={faBars} size="2x" />
+                </Tab>
+                <Tab data-category={Categories.DOING} onClick={onClick}>
+                  <FontAwesomeIcon icon={faBriefcase} size="2x" />
+                </Tab>
+                <Tab data-category={Categories.DONE} onClick={onClick}>
+                  <FontAwesomeIcon icon={faCheck} size="2x" />
+                </Tab>
+              </Tabs>
+              <ToDoCategory>{category}</ToDoCategory>
               <ul>
                 {toDos.map((toDo) => (
                   <ToDo key={toDo.id} {...toDo} />
@@ -83,7 +130,6 @@ function ToDoList() {
               </ul>
             </ToDoItems>
           </ToDoContent>
-          <BtnContainer></BtnContainer>
           <ToDoFooter></ToDoFooter>
           <CreateToDo />
         </ToDoContainer>
