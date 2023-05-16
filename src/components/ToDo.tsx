@@ -4,22 +4,20 @@ import { IToDo } from "../atoms";
 import React from "react";
 import styled from "styled-components";
 
+const Li = styled.li`
+  margin: 10px 0px 10px 0px;
+`;
+const ToDoContent = styled.span`
+  font-size: 15px;
+  font-weight: normal;
+`;
+
 const Tabs = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  margin: 5px 0px;
+  margin: 10px 0px 10px 0px;
   gap: 10px;
 `;
-
-// const Tab = styled.a`
-//   text-align: center;
-//   padding: 7px 0px;
-//   cursor: pointer;
-//   &:hover {
-//     color: rgb(223, 102, 118);
-//     font-size: 15px;
-//   }
-// `;
 
 const Buttons = styled.button`
   font-size: 10px;
@@ -76,8 +74,8 @@ function ToDo({ text, category, id }: IToDo) {
   };
 
   return (
-    <li>
-      <span>{text}</span>
+    <Li>
+      <ToDoContent>{text}</ToDoContent>
       <Tabs>
         {category !== Categories.DOING && (
           <Buttons name={Categories.DOING} onClick={onClick}>
@@ -96,7 +94,7 @@ function ToDo({ text, category, id }: IToDo) {
         )}
       </Tabs>
       <hr />
-    </li>
+    </Li>
   );
 }
 
